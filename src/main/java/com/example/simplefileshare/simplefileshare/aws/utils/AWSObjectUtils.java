@@ -23,4 +23,8 @@ public class AWSObjectUtils {
         request.setMetadata(metadata);
         awsS3Client.putObject(request);
     }
+
+    public String getObjectUrl(String bucketName, String key) {
+        return awsS3Client.getUrl(bucketName, key).toExternalForm();
+    }
 }
