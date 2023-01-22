@@ -1,33 +1,34 @@
 package com.example.simplefileshare.simplefileshare.controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import com.example.simplefileshare.simplefileshare.services.UploadService;
 import org.springframework.web.multipart.MultipartFile;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import com.example.simplefileshare.simplefileshare.services.AWSService;
+import com.example.simplefileshare.simplefileshare.error.utils.ErrorUtils;
+import com.example.simplefileshare.simplefileshare.data.models.base.BaseResponse;
+import com.amazonaws.SdkClientException;
+import java.io.FileNotFoundException;
 
 
 @RestController
 @RequestMapping("/api/files")
 public class FileController {
 
-    private UploadService uploadService = new UploadService();
+    @Autowired
+    private AWSService uploadService;
 
     @PostMapping
     public String upload(@RequestBody MultipartFile file) throws Exception{
-        //Upload File to S3 Logic
         try{
-            String link = uploadService.uploadMultipartFile(file);
-            if(link.isBlank()) throw new Error("File upload failed");
-            return "File Uploaded. File link: "+link;
-        } catch (Exception e){
-            Logger.getGlobal().log(Level.SEVERE, e.getMessage());
-            return "Upload failed";
+            if(!file) throw new FileNotFoundException("Invalid File");
+            String url = uploadService.uploadMultipartFile(file);
+            return new ResponseEntity<>(new BaseResponse<>(null, url), HttpStatus.CREATED);
+        } catch (SdkClientException e){
+            throw ErrorUtils.createApiError(HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "Some error occurred");
+        } catch (FileNotFoundException e){
+            throw ErrorUtils.createApiError(HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "Some file error occurred");
         }
-    }
-
-    @ExceptionHandler()
-    public ResponseEntity<?> FileNotUploaded(Exception exc){
-        return ResponseEntity.notFound().build();
     }
 }
