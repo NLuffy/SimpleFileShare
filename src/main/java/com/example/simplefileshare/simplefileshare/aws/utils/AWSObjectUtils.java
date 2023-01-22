@@ -1,35 +1,26 @@
 package com.example.simplefileshare.simplefileshare.aws.utils;
 
-import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class AWSObjectUtils {
 
     private final AmazonS3 awsS3Client;
 
-
     public AWSObjectUtils(AmazonS3 awsS3Client) {
         this.awsS3Client = awsS3Client;
     }
 
-    public void uploadFile(String bucketName,  String key, File file, boolean publicObject, String contentType) {
-        try {
-            PutObjectRequest request = new PutObjectRequest(bucketName, key, file);
-            ObjectMetadata metadata = new ObjectMetadata();
-            metadata.setContentType(contentType);
-            metadata.addUserMetadata("title", file.getName());
-            request.setMetadata(metadata);
-            awsS3Client.putObject(request);
-        } catch (SdkClientException e) {
-            Logger.getGlobal().log(Level.SEVERE, e.getMessage());
-        }
+    public void uploadFile(String bucketName, String key, File file, String contentType) throws SdkClientException {
+        PutObjectRequest request = new PutObjectRequest(bucketName, key, file);
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentType(contentType);
+        metadata.addUserMetadata("title", file.getName());
+        request.setMetadata(metadata);
+        awsS3Client.putObject(request);
     }
 }

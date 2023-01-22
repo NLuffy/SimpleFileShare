@@ -1,13 +1,12 @@
 package com.example.simplefileshare.simplefileshare.aws.utils;
 
-import com.amazonaws.AmazonServiceException;
+import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.Bucket;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.simplefileshare.simplefileshare.error.models.DuplicateBucketException;
 
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 public class AWSBucketUtils {
 
@@ -17,24 +16,18 @@ public class AWSBucketUtils {
         this.awsS3Client = awsS3client;
     }
 
-    public void createS3Bucket(String bucketName) {
+    public void createS3Bucket(String bucketName) throws SdkClientException, DuplicateBucketException {
         if (awsS3Client.doesBucketExistV2(bucketName)) {
-            Logger.getGlobal().log(Level.INFO, "Bucket name already in use. Try another name.");
-            return;
+            throw new DuplicateBucketException("Bucket name already in use");
         }
         awsS3Client.createBucket(bucketName);
     }
 
-    public List<Bucket> listBuckets() {
+    public List<Bucket> listBuckets() throws SdkClientException {
         return awsS3Client.listBuckets();
     }
 
-    public void deleteBucket(String bucketName) {
-        try {
-            awsS3Client.deleteBucket(bucketName);
-        } catch (AmazonServiceException e) {
-            Logger.getGlobal().log(Level.SEVERE, e.getErrorMessage());
-            return;
-        }
+    public void deleteBucket(String bucketName) throws SdkClientException {
+        awsS3Client.deleteBucket(bucketName);
     }
 }
