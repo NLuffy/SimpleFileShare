@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.amazonaws.SdkClientException;
 import java.io.File;
-import java.io.FileNotFoundException;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -17,12 +16,9 @@ public class AWSService implements UploadInterface {
     @Autowired
     private AmazonS3 awsS3Client;
 
-    @Autowired
-    private MultipartFileToJavaFileUtil multipartFileToJavaFileConverter;
-
     @Override
-    public String uploadMultipartFile (MultipartFile multipartFile) throws FileNotFoundException, SdkClientException {
-            File file = multipartFileToJavaFileConverter.convert(multipartFile);
+    public String uploadMultipartFile (MultipartFile multipartFile) throws Exception {
+            File file = MultipartFileToJavaFileUtil.convert(multipartFile);
             String result = this.uploadFile(file); 
             file.delete();
             return result;

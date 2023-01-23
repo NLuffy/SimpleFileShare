@@ -1,4 +1,4 @@
-package com.example.simplefileshare.simplefileshare.controllers;
+package com.example.simplefileshare.simplefileshare.controller;
 /* Demo Implementation
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;

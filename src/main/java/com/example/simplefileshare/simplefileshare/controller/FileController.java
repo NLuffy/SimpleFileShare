@@ -27,7 +27,7 @@ public class FileController {
             return new ResponseEntity<>(new BaseResponse<>(null, url), HttpStatus.CREATED);
         } catch (SdkClientException e){
             throw ErrorUtils.createApiError(HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "Some error occurred");
-        } catch (FileNotFoundException e){
+        } catch (Exception e){
             throw ErrorUtils.createApiError(HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "Some file error occurred");
         }
     }
