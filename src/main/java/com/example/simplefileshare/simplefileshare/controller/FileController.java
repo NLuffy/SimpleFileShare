@@ -20,9 +20,9 @@ public class FileController {
     private AWSService uploadService;
 
     @PostMapping
-    public String upload(@RequestBody MultipartFile file) throws Exception{
+    public ResponseEntity<BaseResponse<String>> upload(@RequestParam("file") MultipartFile file) throws Exception{
+        System.out.println(file);
         try{
-            if(!file) throw new FileNotFoundException("Invalid File");
             String url = uploadService.uploadMultipartFile(file);
             return new ResponseEntity<>(new BaseResponse<>(null, url), HttpStatus.CREATED);
         } catch (SdkClientException e){

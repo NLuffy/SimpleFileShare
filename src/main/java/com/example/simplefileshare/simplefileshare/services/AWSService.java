@@ -23,13 +23,20 @@ public class AWSService implements UploadInterface {
     @Override
     public String uploadMultipartFile (MultipartFile multipartFile) throws FileNotFoundException, SdkClientException {
             File file = multipartFileToJavaFileConverter.convert(multipartFile);
-            return this.uploadFile(file); 
+            String result = this.uploadFile(file); 
+            file.delete();
+            return result;
     }
 
     @Override
     public String uploadFile (File file) throws SdkClientException {
-        AWSObjectUtils objectUtils = new AWSObjectUtils(awsS3Client);
-        objectUtils.uploadFile("simplefilehost", "AWSBucketUtils", file, "plain/text");
-        return objectUtils.getObjectUrl("simplefilehost", "AWSBucketUtils");
+        try{
+            AWSObjectUtils objectUtils = new AWSObjectUtils(awsS3Client);
+            objectUtils.uploadFile("simplefilehost", "AWSBucketUtils", file, "plain/text");
+            return objectUtils.getObjectUrl("simplefilehost", "AWSBucketUtils");
+        } catch(Exception e) {
+            file.delete();
+            throw e;
+        }
     }
 }
