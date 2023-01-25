@@ -1,5 +1,5 @@
-package com.example.simplefileshare.simplefileshare.controllers;
-
+package com.example.simplefileshare.simplefileshare.controller;
+/* Demo Implementation
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.example.simplefileshare.simplefileshare.aws.utils.AWSObjectUtils;
@@ -37,3 +37,4 @@ public class RootController {
     }
 
 }
+*/

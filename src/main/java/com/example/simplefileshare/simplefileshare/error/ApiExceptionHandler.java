@@ -22,6 +22,6 @@ public class ApiExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<BaseResponse<?>> httpErrorExceptionHandler(HttpClientErrorException exception) {
         log.error(exception.getMessage(), exception);
-        return new ResponseEntity<>(new BaseResponse<>(new ApiErrorMessage(exception.getMessage()), null), exception.getStatusCode());
+        return new ResponseEntity<>(new BaseResponse<Object>(new ApiErrorMessage(exception.getMessage()), null), exception.getStatusCode());
     }
 }
