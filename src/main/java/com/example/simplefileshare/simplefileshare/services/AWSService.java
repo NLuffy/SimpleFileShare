@@ -5,8 +5,9 @@ import com.example.simplefileshare.simplefileshare.aws.utils.AWSObjectUtils;
 import com.example.simplefileshare.simplefileshare.services.utils.MultipartFileToJavaFileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.amazonaws.SdkClientException;
 import java.io.File;
+import java.nio.file.Files;
+
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -25,11 +26,11 @@ public class AWSService implements UploadInterface {
     }
 
     @Override
-    public String uploadFile (File file) throws SdkClientException {
+    public String uploadFile (File file) throws Exception {
         try{
             AWSObjectUtils objectUtils = new AWSObjectUtils(awsS3Client);
-            objectUtils.uploadFile("simplefilehost", "AWSBucketUtils", file, "plain/text");
-            return objectUtils.getObjectUrl("simplefilehost", "AWSBucketUtils");
+            objectUtils.uploadFile("simplefilehost", file.getName(), file, Files.probeContentType(file.toPath()));
+            return objectUtils.getObjectUrl("simplefilehost", file.getName());
         } catch(Exception e) {
             file.delete();
             throw e;
