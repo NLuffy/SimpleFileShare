@@ -8,7 +8,11 @@ import java.io.File;
 public class MultipartFileToJavaFileUtil {
     
     public static File convert(MultipartFile multipartFile) throws Exception {
-        File file = new File("tmp/"+multipartFile.getOriginalFilename());
+        File tempFolder = new File("tmp/");
+        File file = new File(tempFolder, multipartFile.getOriginalFilename());
+        if (!tempFolder.exists()) {
+            tempFolder.mkdir();
+        }
         file.createNewFile();
         FileOutputStream fos = new FileOutputStream(file);
         fos.write(multipartFile.getBytes());
