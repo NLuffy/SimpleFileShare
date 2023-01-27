@@ -22,7 +22,7 @@ public class FileController {
     @PostMapping
     public ResponseEntity<BaseResponse<String>> upload(@RequestParam("file") MultipartFile file) throws Exception {
         try {
-            if (null == file || file.isEmpty()) throw new BadRequestError("File is empty");
+            CheckFileSanity(file);
             String url = uploadService.uploadMultipartFile(file);
             return new ResponseEntity<>(new BaseResponse<>(null, url), HttpStatus.CREATED);
         } catch (SdkClientException e) {
@@ -32,5 +32,10 @@ public class FileController {
         } catch (Exception e) {
             throw ErrorUtils.createApiError(HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "Some file error occurred", e.getStackTrace());
         }
+    }
+
+    private void CheckFileSanity(MultipartFile file) throws Exception {
+        if (null == file || file.isEmpty()) throw new BadRequestError("File is empty");
+        if (file.getSize() / (1024 * 1024) > 10.0) throw new BadRequestError("File size > 10 MB");   
     }
 }
