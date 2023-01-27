@@ -2,6 +2,7 @@ package com.example.simplefileshare.simplefileshare.aws.utils;
 
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 
@@ -16,7 +17,7 @@ public class AWSObjectUtils {
     }
 
     public void uploadFile(String bucketName, String key, File file, String contentType) throws SdkClientException {
-        PutObjectRequest request = new PutObjectRequest(bucketName, key, file);
+        PutObjectRequest request = new PutObjectRequest(bucketName, key, file).withCannedAcl(CannedAccessControlList.PublicRead);
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(contentType);
         metadata.addUserMetadata("title", file.getName());
