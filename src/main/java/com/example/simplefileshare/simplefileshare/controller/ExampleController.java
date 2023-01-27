@@ -1,5 +1,5 @@
 package com.example.simplefileshare.simplefileshare.controller;
-/* Demo Implementation
+// Demo Implementation
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.example.simplefileshare.simplefileshare.aws.utils.AWSObjectUtils;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.File;
 
 @RestController
-public class RootController {
+public class ExampleController {
 
     @Autowired
     private AmazonS3 awsS3Client;
@@ -25,7 +25,7 @@ public class RootController {
             String url = uploadFile();
             return new ResponseEntity<>(new BaseResponse<>(null, url), HttpStatus.OK);
         } catch (SdkClientException e) {
-            throw ErrorUtils.createApiError(HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "Some error occurred");
+            throw ErrorUtils.createApiError(HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "Some error occurred", e.getStackTrace());
         }
     }
 
@@ -37,4 +37,3 @@ public class RootController {
     }
 
 }
-*/
