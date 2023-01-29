@@ -2,6 +2,7 @@ package com.example.simplefileshare.simplefileshare.aws.utils;
 
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 
@@ -26,5 +27,10 @@ public class AWSObjectUtils {
 
     public String getObjectUrl(String bucketName, String key) {
         return awsS3Client.getUrl(bucketName, key).toExternalForm();
+    }
+
+    public void deleteFile (String bucketName, final String key){
+        DeleteObjectRequest request = new DeleteObjectRequest(bucketName, key);
+        awsS3Client.deleteObject(request);
     }
 }
