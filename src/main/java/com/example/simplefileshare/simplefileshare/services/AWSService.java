@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 @Service
-public class AWSService implements UploadInterface, DeleteInterface {
+public class AWSService implements FileHandlingInterface {
     
     @Autowired
     private AmazonS3 awsS3Client;
