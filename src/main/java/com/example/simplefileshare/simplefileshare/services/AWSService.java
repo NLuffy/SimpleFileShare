@@ -7,15 +7,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.io.File;
 import java.nio.file.Files;
-
+import java.net.URL;
 import org.springframework.web.multipart.MultipartFile;
 
 
 @Service
-public class AWSService implements UploadInterface {
+public class AWSService implements UploadInterface, DeleteInterface {
     
     @Autowired
     private AmazonS3 awsS3Client;
+
+    private final String bucketName = "simplefilehost";
 
     @Override
     public String uploadMultipartFile (MultipartFile multipartFile) throws Exception {
@@ -29,11 +31,19 @@ public class AWSService implements UploadInterface {
     public String uploadFile (File file) throws Exception {
         try{
             AWSObjectUtils objectUtils = new AWSObjectUtils(awsS3Client);
-            objectUtils.uploadFile("simplefilehost", file.getName(), file, Files.probeContentType(file.toPath()));
-            return objectUtils.getObjectUrl("simplefilehost", file.getName());
+            objectUtils.uploadFile(bucketName, file.getName(), file, Files.probeContentType(file.toPath()));
+            return objectUtils.getObjectUrl(bucketName, file.getName());
         } catch(Exception e) {
             file.delete();
             throw e;
         }
+    }
+
+    public String deleteFile (final URL url) throws Exception {
+        AWSObjectUtils objectUtils = new AWSObjectUtils(awsS3Client);
+        String key = url.getPath();
+        key = key.substring(1, key.length());
+        objectUtils.deleteFile(bucketName, key);
+        return ("File " + key + " deleted successfully!");
     }
 }
