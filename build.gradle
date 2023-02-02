@@ -5,8 +5,8 @@ plugins {
 }
 
 group = 'com.example.simplefileshare'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '19'
+version = '0.0.4-SNAPSHOT'
+sourceCompatibility = '17'
 
 configurations {
 	compileOnly {
