@@ -5,8 +5,8 @@ plugins {
 }
 
 group = 'com.example.simplefileshare'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '19'
+version = '0.0.5-SNAPSHOT'
+sourceCompatibility = '17'
 
 configurations {
 	compileOnly {
@@ -19,9 +19,10 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
-	compileOnly 'org.projectlombok:lombok'
+	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.387'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
